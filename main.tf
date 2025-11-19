@@ -57,11 +57,10 @@ module "alb" {
     default = {
       port     = 80
       protocol = "HTTP"
-      fixed_response = {
-        content_type = "text/plain"
-        message_body = "Fixed message"
-        status_code  = "200"
+      forward = {
+        target_group_key = "default_action"
       }
+
     }
   }
 

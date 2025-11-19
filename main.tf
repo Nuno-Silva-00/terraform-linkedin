@@ -48,24 +48,26 @@ resource "aws_instance" "blog" {
 module "alb" {
   source = "terraform-aws-modules/alb/aws"
 
-  name = "blog-alb"
+  name    = "blog-alb"
+  vpc_id  = module.blog_vpc.vpc_id
+  subnets = [module.blog_vpc.public_subnets]
+  security_groups = module.blog_sg.security_group_id
 
-  load_balancer_type = "application"
+  listeners = {
+    ex-http-https-redirect = {
+      port     = 80
+      protocol = "HTTP"
 
-  vpc_id          = "module.blog_vpc.vpc_id"
-  subnets         = module.blog_vpc.public_subnets
-  security_groups = [module.blog_sg.security_group_id]
+    }
+  }
 
   target_groups = {
-    name_prefix      = "blog"
-    backend_protocol = "HTTP"
-    backend_port     = 80
-    target_type      = "instance"
-    targets = {
-      my_target = {
-        target_id = aws_instance.blog.id
-        port = 80
-      }
+    ex-instance = {
+      name_prefix      = "blog-"
+      protocol         = "HTTP"
+      port             = 80
+      target_type      = "instance"
+      target_id        = aws_instance.blog.id
     }
   }
 
@@ -73,7 +75,6 @@ module "alb" {
     Environment = "dev"
   }
 }
-
 module "blog_sg"{
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.3.1"

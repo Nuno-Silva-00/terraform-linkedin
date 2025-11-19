@@ -62,7 +62,7 @@ module "alb" {
   }
 
   target_groups = {
-    ex-instance = {
+    default_action = {
       name_prefix      = "blog-"
       protocol         = "HTTP"
       port             = 80

@@ -69,14 +69,6 @@ module "alb" {
     }
   }
 
-  http_tcp_listneres = [
-    {
-      port               = 80
-      protcol            = "HTTP"
-      target_group_index = 0
-    }
-  ]
-
   tags = {
     Environment = "dev"
   }

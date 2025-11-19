@@ -42,12 +42,6 @@ module "autoscaling" {
   max_size = 2
 
   vpc_zone_identifier = module.blog_vpc.public_subnets
-  traffic_source_attachments = {
-    alb = {
-      traffic_source_identifier = module.blog_alb.target_groups["default_action"].arn
-      traffic_source_type       = "elbv2"
-    }
-  }
   security_groups = [module.blog_sg.security_group_id]
   
   image_id      = data.aws_ami.app_ami.id
@@ -78,6 +72,7 @@ module "blog_alb" {
       protocol         = "HTTP"
       port             = 80
       target_type      = "instance"
+      create_attachment = false
     }
   }
 

@@ -54,7 +54,7 @@ module "alb" {
   security_groups = [module.blog_sg.security_group_id]
 
   listeners = {
-    ex-http-https-redirect = {
+    default = {
       port     = 80
       protocol = "HTTP"
 
@@ -75,6 +75,7 @@ module "alb" {
     Environment = "dev"
   }
 }
+
 module "blog_sg"{
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.3.1"

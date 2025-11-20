@@ -42,11 +42,19 @@ module "autoscaling" {
   max_size = 2
 
   vpc_zone_identifier = module.blog_vpc.public_subnets
-  security_groups = [module.blog_sg.security_group_id]
+  security_groups     = [module.blog_sg.security_group_id]
   
   image_id      = data.aws_ami.app_ami.id
   instance_type = var.instance_type
+
+  # Attach ASG to ALB target group
+  traffic_source_attachments = {
+    ex_alb = {
+      traffic_source_identifier = module.blog_alb.target_groups["default_action"].arn
+      traffic_source_type       = "elbv2"
+    }
   }
+}
 
 module "blog_alb" {
   source = "terraform-aws-modules/alb/aws"

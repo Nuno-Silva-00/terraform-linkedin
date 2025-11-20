@@ -35,7 +35,7 @@ variable "environment" {
 
 variable "asg_min_size" {
   description = "Minimum size of the Auto Scaling Group"
-  default     = 1
+  default     = 2
 }
 
 variable "asg_max_size" {
